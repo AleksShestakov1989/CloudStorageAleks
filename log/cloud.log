@@ -1,0 +1,13 @@
+2023-12-09 16:49:20 INFO  Authentication is successfully
+2023-12-09 16:49:20 INFO  User user@gmail.com is authorized
+2023-12-09 16:49:20 INFO  Files [FileWebResponse(filename=HomeBrew.rtf, size=4211), FileWebResponse(filename=85.xml, size=646)] received successfully
+2023-12-09 16:49:29 INFO  Success upload file. User with ID 1
+2023-12-09 16:49:29 INFO  File Message16975462480437250744.eml uploaded successfully
+2023-12-09 16:49:31 INFO  Files [FileWebResponse(filename=HomeBrew.rtf, size=4211), FileWebResponse(filename=Message16975462480437250744.eml, size=31216), FileWebResponse(filename=85.xml, size=646)] received successfully
+2023-12-09 16:49:37 INFO  File 85.xml edited successfully. New filename: 515.xml
+2023-12-09 16:49:37 INFO  File edited successfully
+2023-12-09 16:49:56 INFO  File HomeBrew.rtf edited successfully. New filename: 677.rtf
+2023-12-09 16:49:56 INFO  File edited successfully
+2023-12-09 16:50:06 INFO  Success delete file. User with ID 1
+2023-12-09 16:50:06 INFO  File 515.xml deleted successfully
+2023-12-09 16:50:08 INFO  Files [FileWebResponse(filename=Message16975462480437250744.eml, size=31216), FileWebResponse(filename=677.rtf, size=4211)] received successfully
