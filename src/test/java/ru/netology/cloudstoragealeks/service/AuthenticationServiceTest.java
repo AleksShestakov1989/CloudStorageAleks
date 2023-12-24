@@ -8,8 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.cloudstoragealeks.repository.AuthenticationRepository;
-import ru.netology.cloudstoragealeks.security.JwtTokenUtil;
-import ru.netology.cloudstoragealeks.web.response.AuthResponse;
+import ru.netology.cloudstoragealeks.config.security.jwt.JwtTokenUtil;
+import ru.netology.cloudstoragealeks.dto.response.AuthResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;

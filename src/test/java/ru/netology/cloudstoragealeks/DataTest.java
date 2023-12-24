@@ -5,9 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.netology.cloudstoragealeks.entity.CloudFile;
 import ru.netology.cloudstoragealeks.entity.Role;
 import ru.netology.cloudstoragealeks.entity.User;
-import ru.netology.cloudstoragealeks.model.EnumRoles;
-import ru.netology.cloudstoragealeks.web.request.AuthRequest;
-import ru.netology.cloudstoragealeks.web.response.AuthResponse;
+import ru.netology.cloudstoragealeks.config.security.Roles;
+import ru.netology.cloudstoragealeks.dto.request.AuthRequest;
+import ru.netology.cloudstoragealeks.dto.response.AuthResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ public class DataTest {
     public static final String FILENAME_NEW = "file_new";
     public static final String TOKEN_1 = "token1";
     public static final String TOKEN_2 = "token2";
-    public static final Set<Role> ROLE_SET = new HashSet<>(List.of(new Role(EnumRoles.ROLE_ADMIN)));
+    public static final Set<Role> ROLE_SET = new HashSet<>(List.of(new Role(Roles.ROLE_ADMIN)));
     public static final UserDetails USER_DETAILS = new User(USER_ID, USERNAME_1, PASSWORD, ROLE_SET);
     public static final AuthResponse RESPONSE = new AuthResponse(TOKEN_1);
     public static final AuthRequest REQUEST = new AuthRequest(USERNAME_1, PASSWORD);
@@ -41,35 +41,21 @@ public class DataTest {
 
     static {
         try {
-            TEST_FILE_1 = new CloudFile(
-                    FILENAME_1,
-                    LocalDateTime.now(),
-                    MULTIPART_FILE.getContentType(),
-                    MULTIPART_FILE.getBytes(),
-                    MULTIPART_FILE.getSize(),
-                    USER_ID
-            );
-            TEST_FILE_2 = new CloudFile(FILENAME_2,
-                    LocalDateTime.now(),
-                    MULTIPART_FILE.getContentType(),
-                    MULTIPART_FILE.getBytes(),
-                    MULTIPART_FILE.getSize(),
-                    USER_ID);
+            TEST_FILE_1 = CloudFile.builder()
+                    .filename(FILENAME_1).date(LocalDateTime.now()).type(MULTIPART_FILE.getContentType()).fileData(MULTIPART_FILE.getBytes()).size(MULTIPART_FILE.getSize()).userId(USER_ID).build();
+            TEST_FILE_2 = CloudFile.builder()
+                    .filename(FILENAME_2).date(LocalDateTime.now()).type(MULTIPART_FILE.getContentType()).fileData(MULTIPART_FILE.getBytes()).size(MULTIPART_FILE.getSize()).userId(USER_ID).build();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static CloudFile FILE_EDIT_NAME = new CloudFile(FILENAME_NEW,
-            TEST_FILE_1.getDate(),
-            TEST_FILE_1.getType(),
-            TEST_FILE_1.getFileData(),
-            TEST_FILE_1.getSize(),
-            TEST_FILE_1.getUserId()
-    );
+    public static CloudFile FILE_EDIT_NAME = CloudFile.builder()
+            .filename(FILENAME_NEW).date(TEST_FILE_1.getDate()).type(TEST_FILE_1.getType()).fileData(TEST_FILE_1.getFileData()).size(TEST_FILE_1.getSize()).userId(TEST_FILE_1.getUserId()).build();
 
     public static final List<CloudFile> CLOUD_FILES = List.of(
             TEST_FILE_1,
             TEST_FILE_2
     );
 }
+

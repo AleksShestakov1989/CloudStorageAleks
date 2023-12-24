@@ -5,7 +5,7 @@ services:
   server:
     image: backend
     container_name: 'cloud-storage-server'
-    build: ./
+    build: ..
     ports:
       - "8888:8888"
     depends_on:

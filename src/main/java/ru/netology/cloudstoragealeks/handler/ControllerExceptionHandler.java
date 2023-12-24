@@ -1,4 +1,4 @@
-package ru.netology.cloudstoragealeks.web.handler;
+package ru.netology.cloudstoragealeks.handler;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import ru.netology.cloudstoragealeks.exception.BadCredentialsException;
 import ru.netology.cloudstoragealeks.exception.FileCloudException;
 import ru.netology.cloudstoragealeks.exception.InputDataException;
 import ru.netology.cloudstoragealeks.exception.UnauthorizedException;
-import ru.netology.cloudstoragealeks.web.response.ExceptionWebResponse;
+import ru.netology.cloudstoragealeks.dto.response.ExceptionWebResponse;
 
 @Slf4j
 @ControllerAdvice

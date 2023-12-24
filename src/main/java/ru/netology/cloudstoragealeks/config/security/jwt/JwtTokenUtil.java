@@ -1,4 +1,4 @@
-package ru.netology.cloudstoragealeks.security;
+package ru.netology.cloudstoragealeks.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

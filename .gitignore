@@ -1,5 +1,7 @@
 HELP.md
 target/
+.mvn/wrapper
+frontend/netology-diplom-frontend
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

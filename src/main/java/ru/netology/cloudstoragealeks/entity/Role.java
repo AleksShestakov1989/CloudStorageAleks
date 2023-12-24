@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import ru.netology.cloudstoragealeks.model.EnumRoles;
+import ru.netology.cloudstoragealeks.config.security.Roles;
 
 import java.util.Set;
 
@@ -21,9 +21,9 @@ public class Role implements GrantedAuthority {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private EnumRoles name;
+    private Roles name;
 
-    public Role(EnumRoles name) {
+    public Role(Roles name) {
         this.name = name;
     }
 

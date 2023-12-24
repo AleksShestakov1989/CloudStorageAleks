@@ -1,4 +1,4 @@
-package ru.netology.cloudstoragealeks.config;
+package ru.netology.cloudstoragealeks.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.netology.cloudstoragealeks.security.JwtAuthenticationFilter;
+import ru.netology.cloudstoragealeks.config.security.jwt.JwtAuthenticationFilter;
 import ru.netology.cloudstoragealeks.service.UserService;
 
 @Configuration

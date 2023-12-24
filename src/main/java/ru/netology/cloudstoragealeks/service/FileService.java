@@ -10,14 +10,16 @@ import ru.netology.cloudstoragealeks.entity.User;
 import ru.netology.cloudstoragealeks.exception.FileCloudException;
 import ru.netology.cloudstoragealeks.exception.InputDataException;
 import ru.netology.cloudstoragealeks.exception.UnauthorizedException;
+import ru.netology.cloudstoragealeks.mapper.FileMapper;
 import ru.netology.cloudstoragealeks.repository.AuthenticationRepository;
 import ru.netology.cloudstoragealeks.repository.FileRepository;
 import ru.netology.cloudstoragealeks.repository.UserRepository;
+import ru.netology.cloudstoragealeks.dto.response.FileWebResponse;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,30 +31,28 @@ public class FileService {
     private final AuthenticationRepository authenticationRepository;
     private final UserRepository userRepository;
     private final FileRepository fileRepository;
+    private final FileMapper fileMapper;
 
     @Transactional
     public void uploadFile(String authToken, String filename, MultipartFile file) {
-        final Optional<Long> userId = getUserIdFromToken(authToken);
-        if (userId.isEmpty()) {
-            log.error("Invalid auth-token: Unauthorized");
-            throw new UnauthorizedException("Invalid auth-token: Unauthorized");
-        }
-        final CloudFile fileFromBD = fileRepository.findByUserIdAndFilename(userId.get(), filename);
+        var id = verification(authToken);
+        final CloudFile fileFromBD = fileRepository.findByUserIdAndFilename(id, filename);
         if (fileFromBD != null) {
             log.error(String.format(" The file with name %s already exists in the storage", filename));
             throw new InputDataException(String.format(" The file with name %s already exists in the storage. " +
                     "Please enter a new name for the file ", filename));
         }
         try {
-            CloudFile cloudFile = new CloudFile(
-                    filename,
-                    LocalDateTime.now(),
-                    file.getContentType(),
-                    file.getBytes(),
-                    file.getSize(),
-                    userId.get());
+            CloudFile cloudFile = CloudFile.builder()
+                    .filename(filename)
+                    .date(LocalDateTime.now())
+                    .type(file.getContentType())
+                    .fileData(file.getBytes())
+                    .size(file.getSize())
+                    .userId(id)
+                    .build();
             fileRepository.save(cloudFile);
-            log.info("Success upload file. User with ID {}", userId.get());
+            log.info("Success upload file. User with ID {}", id);
         } catch (IOException e) {
             log.error("InputDataException: Upload file: Input data exception");
             throw new InputDataException("Upload file: Input data exception");
@@ -110,9 +110,9 @@ public class FileService {
     }
 
     @Transactional
-    public Map<String, Long> getAllFiles(String authToken, int limit) {
+    public List<FileWebResponse> getAllFiles(String authToken, int limit) {
         final Optional<Long> userId = getUserIdFromToken(authToken);
-        if (userId.isEmpty()) {
+        if (!userId.isPresent()) {
             log.error("Invalid auth-token: Unauthorized");
             throw new UnauthorizedException("Invalid auth-token: Unauthorized");
         }
@@ -121,7 +121,20 @@ public class FileService {
             log.error("FileCloudException: List of files not received ");
             throw new FileCloudException("List of files not received ");
         }
-        return files.stream().collect(Collectors.toMap(CloudFile::getFilename, CloudFile::getSize));
+        return files.stream()
+                .map(fileMapper::cloudFileToFileWebResponse)
+                .sorted(Comparator.comparing(FileWebResponse::filename))
+                .collect(Collectors.toList());
+
+    }
+
+    private Long verification(String authToken) {
+        final Optional<Long> userId = getUserIdFromToken(authToken);
+        if (userId.isEmpty()) {
+            log.error("Invalid auth-token: Unauthorized");
+            throw new UnauthorizedException("Invalid auth-token: Unauthorized");
+        }
+        return userId.get();
     }
 
     public Optional<Long> getUserIdFromToken(String authToken) {
@@ -133,5 +146,4 @@ public class FileService {
         }
         return Optional.empty();
     }
-
 }

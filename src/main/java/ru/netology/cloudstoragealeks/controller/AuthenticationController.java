@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ru.netology.cloudstoragealeks.service.AuthenticationService;
-import ru.netology.cloudstoragealeks.web.request.AuthRequest;
-import ru.netology.cloudstoragealeks.web.response.AuthResponse;
+import ru.netology.cloudstoragealeks.dto.request.AuthRequest;
+import ru.netology.cloudstoragealeks.dto.response.AuthResponse;
 
 @Slf4j
 @RestController
@@ -26,8 +26,8 @@ public class AuthenticationController {
     public AuthResponse login(@RequestBody AuthRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getLogin(),
-                        request.getPassword()));
+                        request.login(),
+                        request.password()));
         log.info("Authentication is successfully");
         return authenticationService.login(request);
     }
@@ -35,6 +35,7 @@ public class AuthenticationController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("auth-token") String authToken) {
         authenticationService.logout(authToken);
-        return ResponseEntity.ok(HttpStatus.OK);
+        log.info("Logout is successfully");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -11,10 +11,13 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.netology.cloudstoragealeks.entity.CloudFile;
 import ru.netology.cloudstoragealeks.entity.User;
+import ru.netology.cloudstoragealeks.mapper.FileMapper;
 import ru.netology.cloudstoragealeks.repository.AuthenticationRepository;
 import ru.netology.cloudstoragealeks.repository.FileRepository;
 import ru.netology.cloudstoragealeks.repository.UserRepository;
+import ru.netology.cloudstoragealeks.dto.response.FileWebResponse;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -37,6 +40,8 @@ public class FileServiceTest {
     UserRepository userRepository;
     @Mock
     AuthenticationRepository authenticationRepository;
+    @Mock
+    FileMapper fileMapper;
 
     @BeforeEach
     void setUp() {
@@ -77,13 +82,16 @@ public class FileServiceTest {
 
     @Test
     void getAllFilesTest() {
-        Map<String, Long> expectedList = Map.of(
-                FILENAME_1, TEST_FILE_1.getSize(),
-                FILENAME_2, TEST_FILE_2.getSize());
+        FileWebResponse fileWebResponse1 = new FileWebResponse(FILENAME_1, Math.toIntExact(TEST_FILE_1.getSize()));
+        FileWebResponse fileWebResponse2 = new FileWebResponse(FILENAME_2, Math.toIntExact(TEST_FILE_2.getSize()));
+        List<FileWebResponse> expectedList = List.of(fileWebResponse1, fileWebResponse2);
         when(fileRepository.findAllByUserIdWithLimit(USER_ID, CLOUD_FILES.size())).thenReturn(CLOUD_FILES);
-        Map<String, Long> resultList = fileService.getAllFiles(BEARER_TOKEN, expectedList.size());
+        when(fileMapper.cloudFileToFileWebResponse(TEST_FILE_1)).thenReturn(fileWebResponse1);
+        when(fileMapper.cloudFileToFileWebResponse(TEST_FILE_2)).thenReturn(fileWebResponse2);
+        List<FileWebResponse> resultList = fileService.getAllFiles(BEARER_TOKEN, expectedList.size());
         assertEquals(expectedList, resultList);
     }
+
 
     @Test
     void getUserIdFromTokenTest() {

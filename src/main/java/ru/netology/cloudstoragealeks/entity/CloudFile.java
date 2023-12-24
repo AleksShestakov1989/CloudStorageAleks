@@ -2,6 +2,7 @@ package ru.netology.cloudstoragealeks.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "files", schema = "netology_diploma")
 public class CloudFile {
 
@@ -37,12 +39,4 @@ public class CloudFile {
     @Column(nullable = false)
     private Long userId;
 
-    public CloudFile(String fileName, LocalDateTime now, String contentType, byte[] bytes, long size, Long id) {
-        this.filename = fileName;
-        this.date = now;
-        this.type = contentType;
-        this.fileData = bytes;
-        this.size = size;
-        this.userId = id;
-    }
 }
